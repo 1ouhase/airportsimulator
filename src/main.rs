@@ -34,7 +34,7 @@ impl PassengerSummoner {
         Self { id, passenger_list}
     }
     fn start_summon(&self){
-        let mut passenger_log = Arc::clone(&self.passenger_list);
+        let passenger_list = Arc::clone(&self.passenger_list);
         let summoner_id = self.id;
 
         thread::spawn(move || {
@@ -50,7 +50,6 @@ impl PassengerSummoner {
                 println!("Summoner {}: Created passenger {}", summoner_id, passenger_id);
             }
         });
-
     }
 }
 fn main() {

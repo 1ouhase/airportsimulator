@@ -40,7 +40,7 @@ impl PassengerSummoner {
         thread::spawn(move || {
             let mut passenger_counter = 0;
             loop {
-                thread::sleep(Duration::from_secs(2)); // Adjust as needed
+                thread::sleep(Duration::from_secs(2));
                 
                 passenger_counter += 1;
                 let passenger_id = format!("PASS-{}-{}", summoner_id, passenger_counter);

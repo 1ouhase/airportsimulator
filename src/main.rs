@@ -1,5 +1,4 @@
 use chrono::Local;
-use std::fmt::format;
 use std::io;
 use std::sync::{Arc, Mutex};
 use std::thread;
@@ -43,7 +42,7 @@ impl Sorter {
                     Some(bag) => {
                         log.lock().unwrap().push(format!("[Sorter] sorting bag {} for flight {}", bag.id, bag.flight));
                         thread::sleep(Duration::from_secs(1));
-                        log.lock().unwrap().push(format!("[Sorter] bag {} sorter at {}", bag.id, Local::now().format("%H:%M:%S")));
+                        log.lock().unwrap().push(format!("[Sorter] bag {} sorted at {}", bag.id, Local::now().format("%H:%M:%S")));
                         sorted_belt.lock().unwrap().push(bag);
                     }
                     None => {
@@ -183,15 +182,15 @@ impl Gate {
     }
 }
 
-
+// app struct, includes every variables the program needs to run
 struct App {
     exit: bool,
     input: String,
     counters: Arc<Mutex<Vec<Counter>>>,
     gates: Arc<Mutex<Vec<Gate>>>,
     queue: Arc<Mutex<Vec<Passenger>>>,
-    log: Arc<Mutex<Vec<String>>>,         // baggage activity
-    system_log: Arc<Mutex<Vec<String>>>,  // system/command messages
+    log: Arc<Mutex<Vec<String>>>,
+    system_log: Arc<Mutex<Vec<String>>>,
 }
 
 impl App {
@@ -400,7 +399,7 @@ impl App {
     }
 }
 
-// --- Main ---
+// program start... MAIN
 
 fn main() -> io::Result<()> {
     let flights = ["SK101", "SK202", "SK303"];
@@ -415,6 +414,7 @@ fn main() -> io::Result<()> {
     let counters: Arc<Mutex<Vec<Counter>>> = Arc::new(Mutex::new(vec![
         Counter::new(1),
         Counter::new(2),
+        Counter::new(3)
     ]));
 
     let gates: Arc<Mutex<Vec<Gate>>> = Arc::new(Mutex::new(vec![
@@ -423,7 +423,7 @@ fn main() -> io::Result<()> {
         Gate::new(3, "SK303"),
     ]));
 
-    // --- Summoner thread ---
+    // Passenger summoner thread start
     let queue_for_summoner = Arc::clone(&queue);
     thread::spawn(move || {
         let mut count = 0;
